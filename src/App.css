@@ -1,0 +1,57 @@
+
+.navbarLinks{
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.navbarLinks a {
+  position: relative;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+
+  transition: color 0.3s ease;
+}
+
+.navbarLinks a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background-color: rgb(255, 77, 0);
+  transition: width 0.3s ease;
+}
+
+.navbarLinks a:hover {
+  color: rgb(255, 111, 0);
+}
+
+.navbarLinks a:hover::after {
+  width: 100%;
+}
+
+
+.inpCard {
+  background: linear-gradient(to right, #fef84f, #ffc822ce);
+  padding: 20px;
+  color: white;
+   box-shadow: 0 0 10px rgb(141, 50, 50);
+   border-radius: 10px;
+}
+
+.taskInp{
+  border: none;
+  padding: 0 40px;
+  border-radius: 10px;
+}
+
+.tableCard{
+  
+  border: none;
+  border-radius: 10px;  
+  box-shadow: 0 0 10px gray;
+}
