@@ -1,30 +1,92 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
+
+const [inputVal,setInputVal] = useState('');
+
+const [data,setData] = useState([])
+// write a useState for the data to reload after adding new tasks
+const [change,setChange] = useState({});
+
+useEffect(()=>{
+  getData()
+},[change])
+
+// create a function for the button when whenc clicked to add the input task
+const addClick = async()=>{
+
+  try {
+    
+    if(inputVal == ""){  // always check if the  input value is empty or not
+      alert("please add a task")
+    } else{
+
+      // create a object to store the input value
+      let reqBody = {
+        todoName : inputVal
+      }
+      // create a post response 
+      let apiResponse = await axios.post(" http://localhost:3000/todo",reqBody);
+      // console.log(apiResponse);
+
+      // notify the user if  task is added or not added
+
+      if(apiResponse.status ===201){
+        setChange(apiResponse);  // it used for the data to reload when the addclick is clciked
+        setInputVal(""); // to remove the previous input value in the ui
+        alert("successfully added")
+      }else {
+        alert("something went wrong")
+      }
+      
+    }
+
+  } catch (error) {
+    console.log(error);
+    alert("failed to add todo")
+  }
+
+
+
+  // getData();
+}
+
+
+// to  get the data from the server
+
+const getData = async()=>{
+
+  try {
+    
+let apiResponse = await axios.get(" http://localhost:3000/todo");
+setData(apiResponse.data);
+console.log(apiResponse.data)
+
+
+  } catch (error) {
+    console.log(error);
+    alert("failed to get todo tasks")
+  }
+
+}
+
   return (
     <div className=''>
-<div className='d-flex justify-content-center pt-3'>
-    <ul className='navbarLinks'>
-    <li ><Link>Home</Link></li>
-     <li ><Link>Page 02</Link></li>
-      <li ><Link>Page 03</Link></li>
-    </ul>
-</div>
-
 <div className='d-flex justify-content-center'>
     <h1 className='text-warning ' >Todo Tasks📒</h1>
 </div>
 
         <div className='inpCard container bg-danger mt-4 d-flex gap-5 p-3 justify-content-center'>
-            <input className='taskInp' type="text" />
-            <button className='btn btn-primary'>Add Task</button>
+            <input onChange={(event)=> setInputVal(event.target.value)} className='taskInp' value={inputVal} type="text" />
+            <button onClick={addClick} className='btn btn-primary'>Add Task</button>
         </div>
 
 
 <div className='container tableCard mt-5'>
   <div className='taskTable'>
-            <table class="table">
+            <table className="table">
   <thead>
     <tr>
       <th scope="col">ID</th>
@@ -33,11 +95,26 @@ const Home = () => {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>01</td>
-      <td>task - wake up</td>
-      <td><button className='btn btn-warning'>edit</button> <button  className='btn btn-danger' >Delete</button></td>
+{ //always remeber to check if the data is empty array or not
+data.length>0? <>  
+{ // map the data and display it in the table using the map array method
+  data.map(eachData =>(
+
+     <tr>
+      <td>{eachData.id}</td>
+      <td>{eachData.todoName}</td>
+      <td><button className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></button> <button  className='btn btn-danger' ><i className="fa-solid fa-trash"></i></button></td>
     </tr>
+
+  ))
+}
+</> : <h1>no tasks found</h1>
+}
+
+
+
+
+   
   </tbody>
 </table>
         </div>
