@@ -18,6 +18,36 @@ useEffect(()=>{
 const addClick = async()=>{
 
 
+  try {
+    
+    if(inputVal == ""){  // always check if the  input value is empty or not
+      alert("please add a task")
+    } else{
+
+      // create a object to store the input value
+      let reqBody = {
+        todoName : inputVal
+      }
+      // create a post response 
+      let apiResponse = await axios.post(" http://localhost:3000/todo",reqBody);
+      // console.log(apiResponse);
+
+      // notify the user if  task is added or not added
+
+      if(apiResponse.status ===201){
+        setChange(apiResponse);  // it used for the data to reload when the addclick is clciked
+        setInputVal(""); // to remove the previous input value in the ui
+        alert("successfully added")
+      }else {
+        alert("something went wrong")
+      }
+      
+    }
+
+  } catch (error) {
+    console.log(error);
+    alert("failed to add todo")
+  }
 
 
   // getData();
