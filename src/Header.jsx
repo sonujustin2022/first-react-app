@@ -6,7 +6,7 @@ const Header = () => {
         <div className='d-flex justify-content-center pt-3'>
     <ul className='navbarLinks'>
     <li ><Link  to={"/"}>Home</Link></li>
-     <li ><Link>Page 02</Link></li>
+     <li ><Link to={'/BackGround'}>change backGround color</Link></li>
       <li ><Link>Page 03</Link></li>
     </ul>
 </div>
