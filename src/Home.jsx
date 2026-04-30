@@ -34,7 +34,7 @@ const addClick = async()=>{
         todoName : inputVal
       }
       // create a post response 
-      let apiResponse = await axios.post("https://todobe-reactjs.onrender.com",reqBody);
+      let apiResponse = await axios.post("https://todobe-reactjs.onrender.com/todo",reqBody);
       // console.log(apiResponse);
 
       // notify the user if  task is added or not added
