@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import BackgroundColor from './BackgroundColor';
 
 const Home = () => {
 
@@ -9,6 +10,10 @@ const [inputVal,setInputVal] = useState('');
 const [data,setData] = useState([])
 // write a useState for the data to reload after adding new tasks
 const [change,setChange] = useState({});
+
+const [editId,setEditId] = useState(null);
+// for the edit button
+const [editBtnShow,setEditBtnShow] = useState(false);
 
 useEffect(()=>{
   getData()
@@ -29,7 +34,7 @@ const addClick = async()=>{
         todoName : inputVal
       }
       // create a post response 
-      let apiResponse = await axios.post(" http://localhost:3000/todo",reqBody);
+      let apiResponse = await axios.post("https://todobe-reactjs.onrender.com",reqBody);
       // console.log(apiResponse);
 
       // notify the user if  task is added or not added
@@ -60,7 +65,7 @@ const getData = async()=>{
 
   try {
     
-let apiResponse = await axios.get(" http://localhost:3000/todo");
+let apiResponse = await axios.get(" https://todobe-reactjs.onrender.com/todo");
 setData(apiResponse.data);
 console.log(apiResponse.data)
 
@@ -70,7 +75,56 @@ console.log(apiResponse.data)
     alert("failed to get todo tasks")
   }
 
+
+
+
 }
+
+  const deleteClick = async(id)=>{
+    try {
+      
+      let apiResponse = axios.delete(`https://todobe-reactjs.onrender.com/todo/${id}`);
+      if(apiResponse.status == 200){
+        alert("successfully deleted");
+      }else{
+        alert("something went wronf not delted")
+      }
+     
+      console.log(apiResponse);
+    } catch (error) {
+      console.log(error);
+      alert("something went wrong,cannot delete")
+    }
+
+
+    getData();
+  }
+
+const editTodo = async () =>{
+  try {
+
+  let reqBody = {
+        todoName : inputVal
+      }
+    let apiResponse = await axios.put(`https://todobe-reactjs.onrender.com/todo/${editId}`,reqBody);
+    if(apiResponse.status==200){
+      setChange(apiResponse);
+      setInputVal('');
+      setEditId(null);
+      setEditBtnShow(false);
+      alert("successfully delted")
+
+    }else{
+      alert("cannot save edit,something went wrong")
+    }
+    
+  } catch (error) {
+    console.log(error);
+    alert("something went wrong,cannot edit")
+  }
+
+}
+
 
   return (
     <div className=''>
@@ -78,9 +132,12 @@ console.log(apiResponse.data)
     <h1 className='text-warning ' >Todo Tasks📒</h1>
 </div>
 
-        <div className='inpCard container bg-danger mt-4 d-flex gap-5 p-3 justify-content-center'>
+        <div   className='inpCard container  mt-4 d-flex gap-5 p-3 justify-content-center'>
             <input onChange={(event)=> setInputVal(event.target.value)} className='taskInp' value={inputVal} type="text" />
-            <button onClick={addClick} className='btn btn-primary'>Add Task</button>
+            
+            {
+              editBtnShow? <button onClick={editTodo} className='btn btn-warning'>Edit</button> :<button onClick={addClick} className='btn btn-primary'>Add Task</button>
+            }
         </div>
 
 
@@ -103,12 +160,17 @@ data.length>0? <>
      <tr>
       <td>{eachData.id}</td>
       <td>{eachData.todoName}</td>
-      <td><button className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></button> <button  className='btn btn-danger' ><i className="fa-solid fa-trash"></i></button></td>
+      <td><button onClick={()=> {setInputVal(eachData.todoName),setEditBtnShow(true),setEditId(eachData.id)}} className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></button> <button onClick={()=>deleteClick(eachData.id)}  className='btn btn-danger' ><i className="fa-solid fa-trash"></i></button></td>
     </tr>
 
   ))
 }
-</> : <h1>no tasks found</h1>
+</> : <tr>
+      <th ></th>
+      <th >no data found</th>
+      <th ></th>
+
+    </tr>
 }
 
 
