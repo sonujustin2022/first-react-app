@@ -87,7 +87,7 @@ console.log(apiResponse.data)
       if(apiResponse.status == 200){
         alert("successfully deleted");
       }else{
-        alert("something went wronf not delted")
+        alert("Successfully deleted")
       }
      
       console.log(apiResponse);
@@ -112,7 +112,7 @@ const editTodo = async () =>{
       setInputVal('');
       setEditId(null);
       setEditBtnShow(false);
-      alert("successfully delted")
+      alert("successfully saved edited ")
 
     }else{
       alert("cannot save edit,something went wrong")
